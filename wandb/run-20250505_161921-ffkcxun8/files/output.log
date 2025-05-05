@@ -1,0 +1,91 @@
+Reward: 16.42:   1%|█▊                                                                                                                                                                       | 1071/100000 [00:23<36:03, 45.73it/s]
+Traceback (most recent call last):
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py", line 147, in <module>
+    agent.record_step(obs, next_obs, actions, rewards, terminations, infos)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/drnd_agent.py", line 62, in record_step
+    intrinsic_reward = self.drnd.compute_intrinsic_reward(obs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/exploration/drnd.py", line 29, in compute_intrinsic_reward
+    mean_target, std_target = self.target.apply(self.target_params, obs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 182, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 2240, in apply
+    return apply(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/core/scope.py", line 1079, in wrapper
+    y = fn(root, *args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 3022, in scope_fn
+    return fn(module.clone(parent=scope, _deep_clone=True), *args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 699, in wrapped_module_method
+    return self._call_wrapped_method(fun, args, kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 1216, in _call_wrapped_method
+    y = run_fun(self, *args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/networks/drnd_network.py", line 9, in __call__
+    x = nn.relu(nn.Dense(self.hidden_dim)(x))
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 699, in wrapped_module_method
+    return self._call_wrapped_method(fun, args, kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 1216, in _call_wrapped_method
+    y = run_fun(self, *args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/linear.py", line 263, in __call__
+    kernel = self.param(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/module.py", line 1877, in param
+    v = self.scope.param(name, init_fn, *init_args, unbox=unbox, **init_kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/core/scope.py", line 950, in param
+    abs_value = jax.eval_shape(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 182, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/api.py", line 2840, in eval_shape
+    return jit(fun).eval_shape(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/traceback_util.py", line 182, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/pjit.py", line 401, in jit_eval_shape
+    p, _ = _infer_params(jit_func._fun, jit_func._jit_info, args, kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/pjit.py", line 716, in _infer_params
+    return _infer_params_internal(fun, ji, args, kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/pjit.py", line 739, in _infer_params_internal
+    p, args_flat = _infer_params_impl(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/pjit.py", line 636, in _infer_params_impl
+    jaxpr, consts, out_avals, attrs_tracked = _create_pjit_jaxpr(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/linear_util.py", line 477, in memoized_fun
+    ans = call(fun, *args)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/pjit.py", line 1441, in _create_pjit_jaxpr
+    jaxpr, global_out_avals, consts, attrs_tracked = pe.trace_to_jaxpr_dynamic(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/profiler.py", line 334, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 2223, in trace_to_jaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/linear_util.py", line 211, in call_wrapped
+    return self.f_transformed(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/api_util.py", line 288, in _argnums_partial
+    return _fun(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/api_util.py", line 73, in flatten_fun
+    ans = f(*py_args, **py_kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/linear_util.py", line 402, in _get_result_paths_thunk
+    ans = _fun(*args, **kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/core/scope.py", line 951, in <lambda>
+    lambda: init_fn(random.key(0), *init_args, **init_kwargs)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/nn/initializers.py", line 334, in init
+    stddev = jnp.sqrt(variance) / jnp.array(.87962566103423978, dtype)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/numpy/lax_numpy.py", line 5548, in array
+    out_array: Array = lax_internal._convert_element_type(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/lax/lax.py", line 1727, in _convert_element_type
+    return convert_element_type_p.bind(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 496, in bind
+    return self._true_bind(*args, **params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 512, in _true_bind
+    return self.bind_with_trace(prev_trace, args, params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/lax/lax.py", line 4875, in _convert_element_type_bind_with_trace
+    operand = core.Primitive.bind_with_trace(convert_element_type_p, trace, args, params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 517, in bind_with_trace
+    return trace.process_primitive(self, args, params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 1972, in process_primitive
+    return self.default_process_primitive(primitive, jaxpr_tracers, params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/interpreters/partial_eval.py", line 1976, in default_process_primitive
+    out_avals, effects = primitive.abstract_eval(*avals, **params)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 549, in abstract_eval_
+    return abstract_eval(*args, **kwargs), no_effects
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/lax/utils.py", line 116, in standard_abstract_eval
+    out_aval = core.ShapedArray(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 1914, in __init__
+    self.shape = canonicalize_shape(shape)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/jax/_src/core.py", line 1736, in canonicalize_shape
+    return tuple(unsafe_map(_canonicalize_dimension, shape))
+KeyboardInterrupt
