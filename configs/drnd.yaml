@@ -1,0 +1,30 @@
+# configs/drnd.yaml
+
+env_id: "CartPole-v1"
+env_name: CartPole-v1
+exp_name: "drnd_experiment"
+num_envs: 1
+seed: 42
+track: true
+capture_video: true
+save_model: false
+wandb_project_name: "nanodqn"
+agent_type: drnd
+
+# Training parameters
+total_timesteps: 100000
+learning_rate: 0.0003
+gamma: 0.99
+buffer_size: 100000
+batch_size: 64
+exploration_fraction: 0.1
+exploration_final_eps: 0.01
+target_network_frequency: 500
+
+# DRND-specific parameters
+train_frequency: 4
+predictor_hidden_dim: 128
+target_hidden_dim: 128
+intrinsic_reward_scale: 1.0
+predictor_update_freq: 5
+target_update_freq: 1000
