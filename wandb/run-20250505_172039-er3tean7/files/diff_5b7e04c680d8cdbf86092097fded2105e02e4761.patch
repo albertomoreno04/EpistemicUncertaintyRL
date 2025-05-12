@@ -1,0 +1,73 @@
+diff --git a/exploration/__pycache__/drnd.cpython-310.pyc b/exploration/__pycache__/drnd.cpython-310.pyc
+index 48f980e..3869c8b 100644
+Binary files a/exploration/__pycache__/drnd.cpython-310.pyc and b/exploration/__pycache__/drnd.cpython-310.pyc differ
+diff --git a/exploration/drnd.py b/exploration/drnd.py
+index 3275d88..34e08bf 100644
+--- a/exploration/drnd.py
++++ b/exploration/drnd.py
+@@ -28,9 +28,12 @@ class DRND:
+         mean_pred, std_pred = self.predictor.apply(self.train_state.params, obs)
+         mean_target, std_target = self.target.apply(self.target_params, obs)
+ 
+-        # Compute Mahalanobis distance
+-        diff = mean_pred - mean_target
+-        intrinsic_reward = jnp.sum((diff ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
++        b1 = jnp.sum((mean_pred - mean_target) ** 2 / (std_pred ** 2 + 1e-8), axis=-1)
++
++        b2 = jnp.sum((std_pred ** 2 - std_target ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
++
++        alpha = 0.5  # TODO: Could make it dynamic
++        intrinsic_reward = alpha * b1 + (1 - alpha) * b2
+ 
+         return intrinsic_reward
+ 
+diff --git a/run_all.py b/run_all.py
+new file mode 100644
+index 0000000..23af57a
+--- /dev/null
++++ b/run_all.py
+@@ -0,0 +1,16 @@
++import os
++import subprocess
++
++# Define environments and algorithms
++envs = ["CartPole-v1", "LunarLander-v2", "MountainCar-v0"]
++agents = ["epsilon_greedy", "rnd"]
++
++# Base command
++base_command = "python main.py"
++
++# Loop over everything
++for env in envs:
++    for agent in agents:
++        print(f"Running {agent} on {env}...")
++        command = f"{base_command} --env_id {env} --agent_type {agent}"
++        subprocess.run(command, shell=True)
+\ No newline at end of file
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index 79d1e90..841281b 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug-internal.log
+\ No newline at end of file
++run-20250505_172039-er3tean7/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index 20acf0b..ea5c95d 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug.log
+\ No newline at end of file
++run-20250505_172039-er3tean7/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index 67286f8..d69ba6f 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8
+\ No newline at end of file
++run-20250505_172039-er3tean7
+\ No newline at end of file

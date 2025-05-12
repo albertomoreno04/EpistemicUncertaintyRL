@@ -1,0 +1,63 @@
+diff --git a/main.py b/main.py
+index e1d16dc..2219dba 100644
+--- a/main.py
++++ b/main.py
+@@ -19,7 +19,7 @@ import tyro
+ from flax.training.train_state import TrainState
+ from tqdm.auto import tqdm
+ 
+-with open("configs/drnd.yaml", "r") as f:
++with open("configs/epsilon_greedy.yaml", "r") as f:
+     config = yaml.safe_load(f)
+ 
+ 
+diff --git a/run_all.py b/run_all.py
+new file mode 100644
+index 0000000..23af57a
+--- /dev/null
++++ b/run_all.py
+@@ -0,0 +1,16 @@
++import os
++import subprocess
++
++# Define environments and algorithms
++envs = ["CartPole-v1", "LunarLander-v2", "MountainCar-v0"]
++agents = ["epsilon_greedy", "rnd"]
++
++# Base command
++base_command = "python main.py"
++
++# Loop over everything
++for env in envs:
++    for agent in agents:
++        print(f"Running {agent} on {env}...")
++        command = f"{base_command} --env_id {env} --agent_type {agent}"
++        subprocess.run(command, shell=True)
+\ No newline at end of file
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index 79d1e90..c8d0ef6 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug-internal.log
+\ No newline at end of file
++run-20250505_171123-mivmt5no/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index 20acf0b..0ab694c 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug.log
+\ No newline at end of file
++run-20250505_171123-mivmt5no/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index 67286f8..6390b9c 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8
+\ No newline at end of file
++run-20250505_171123-mivmt5no
+\ No newline at end of file

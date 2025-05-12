@@ -1,0 +1,119 @@
+diff --git a/agents/__pycache__/drnd_agent.cpython-310.pyc b/agents/__pycache__/drnd_agent.cpython-310.pyc
+index 10dd961..cd8718a 100644
+Binary files a/agents/__pycache__/drnd_agent.cpython-310.pyc and b/agents/__pycache__/drnd_agent.cpython-310.pyc differ
+diff --git a/agents/__pycache__/epsilon_greedy_agent.cpython-310.pyc b/agents/__pycache__/epsilon_greedy_agent.cpython-310.pyc
+index 14e72bc..29cd7a3 100644
+Binary files a/agents/__pycache__/epsilon_greedy_agent.cpython-310.pyc and b/agents/__pycache__/epsilon_greedy_agent.cpython-310.pyc differ
+diff --git a/agents/drnd_agent.py b/agents/drnd_agent.py
+index c339167..8d4df20 100644
+--- a/agents/drnd_agent.py
++++ b/agents/drnd_agent.py
+@@ -58,8 +58,8 @@ class DRNDAgent:
+ 
+         return np.array([action])
+ 
+-    def record_step(self, obs, next_obs, actions, rewards, dones, infos):
+-        intrinsic_reward = self.drnd.compute_intrinsic_reward(obs)
++    def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step, max_steps):
++        intrinsic_reward = self.drnd.compute_intrinsic_reward(obs, global_step, max_steps)
+         total_reward = rewards + self.config["intrinsic_reward_scale"] * intrinsic_reward
+         self.rb.add(obs, next_obs, actions, total_reward, dones, infos)
+ 
+diff --git a/exploration/__pycache__/drnd.cpython-310.pyc b/exploration/__pycache__/drnd.cpython-310.pyc
+index 48f980e..f9ce299 100644
+Binary files a/exploration/__pycache__/drnd.cpython-310.pyc and b/exploration/__pycache__/drnd.cpython-310.pyc differ
+diff --git a/exploration/drnd.py b/exploration/drnd.py
+index 3275d88..820b307 100644
+--- a/exploration/drnd.py
++++ b/exploration/drnd.py
+@@ -24,16 +24,23 @@ class DRND:
+             tx=self.optimizer
+         )
+ 
+-    def compute_intrinsic_reward(self, obs):
++    def compute_intrinsic_reward(self, obs, global_step, max_steps):
+         mean_pred, std_pred = self.predictor.apply(self.train_state.params, obs)
+         mean_target, std_target = self.target.apply(self.target_params, obs)
+ 
+-        # Compute Mahalanobis distance
+-        diff = mean_pred - mean_target
+-        intrinsic_reward = jnp.sum((diff ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
++        b1 = jnp.sum((mean_pred - mean_target) ** 2 / (std_pred ** 2 + 1e-8), axis=-1)
++
++        b2 = jnp.sum((std_pred ** 2 - std_target ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
++
++        alpha = self.dynamic_alpha(global_step, max_steps)  # TODO: Could make it dynamic
++        intrinsic_reward = alpha * b1 + (1 - alpha) * b2
+ 
+         return intrinsic_reward
+ 
++    def dynamic_alpha(self, global_step, max_steps):
++        # Decrease alpha from 1 to 0 as training progresses
++        return max(0, 1 - global_step / max_steps)
++
+     @partial(jax.jit, static_argnums=0)
+     def update_step(self, train_state, obs):
+         def loss_fn(params):
+diff --git a/main.py b/main.py
+index e1d16dc..f27bebe 100644
+--- a/main.py
++++ b/main.py
+@@ -144,7 +144,7 @@ if __name__ == "__main__":
+             progress_bar.set_description_str(f"Reward: {float(last_mean_rs):.2f}")
+ 
+         # save data to reply buffer; handle `final_observation`
+-        agent.record_step(obs, next_obs, actions, rewards, terminations, infos)
++        agent.record_step(obs, next_obs, actions, rewards, terminations, infos, global_step, args.total_timesteps)
+         agent.train_step(global_step)
+ 
+         # CRUCIAL step easy to overlook, moving to the new observations
+diff --git a/run_all.py b/run_all.py
+new file mode 100644
+index 0000000..23af57a
+--- /dev/null
++++ b/run_all.py
+@@ -0,0 +1,16 @@
++import os
++import subprocess
++
++# Define environments and algorithms
++envs = ["CartPole-v1", "LunarLander-v2", "MountainCar-v0"]
++agents = ["epsilon_greedy", "rnd"]
++
++# Base command
++base_command = "python main.py"
++
++# Loop over everything
++for env in envs:
++    for agent in agents:
++        print(f"Running {agent} on {env}...")
++        command = f"{base_command} --env_id {env} --agent_type {agent}"
++        subprocess.run(command, shell=True)
+\ No newline at end of file
+diff --git a/wandb/debug-internal.log b/wandb/debug-internal.log
+index 79d1e90..161fc87 120000
+--- a/wandb/debug-internal.log
++++ b/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug-internal.log
+\ No newline at end of file
++run-20250505_173129-g9epbpyq/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/wandb/debug.log b/wandb/debug.log
+index 20acf0b..0a36b37 120000
+--- a/wandb/debug.log
++++ b/wandb/debug.log
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8/logs/debug.log
+\ No newline at end of file
++run-20250505_173129-g9epbpyq/logs/debug.log
+\ No newline at end of file
+diff --git a/wandb/latest-run b/wandb/latest-run
+index 67286f8..f9c3fd0 120000
+--- a/wandb/latest-run
++++ b/wandb/latest-run
+@@ -1 +1 @@
+-run-20250505_161921-ffkcxun8
+\ No newline at end of file
++run-20250505_173129-g9epbpyq
+\ No newline at end of file

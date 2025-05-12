@@ -1,0 +1,15 @@
+{"time":"2025-05-10T17:42:38.636806+02:00","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250510_174238-kg3r1qil/logs/debug-core.log"}
+{"time":"2025-05-10T17:42:38.929468+02:00","level":"INFO","msg":"created new stream","id":"kg3r1qil"}
+{"time":"2025-05-10T17:42:38.929496+02:00","level":"INFO","msg":"stream: started","id":"kg3r1qil"}
+{"time":"2025-05-10T17:42:38.929502+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:42:38.929527+02:00","level":"INFO","msg":"handler: started","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:42:38.929571+02:00","level":"INFO","msg":"sender: started","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:42:39.17235+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-10T17:43:19.283336+02:00","level":"INFO","msg":"stream: closing","id":"kg3r1qil"}
+{"time":"2025-05-10T17:43:19.2834+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-10T17:43:19.283735+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-10T17:43:19.997648+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-10T17:43:21.080014+02:00","level":"INFO","msg":"sender: closed","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:43:21.079989+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:43:21.079998+02:00","level":"INFO","msg":"handler: closed","stream_id":"kg3r1qil"}
+{"time":"2025-05-10T17:43:21.08088+02:00","level":"INFO","msg":"stream: closed","id":"kg3r1qil"}

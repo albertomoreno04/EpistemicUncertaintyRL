@@ -5,6 +5,7 @@ import jax.numpy as jnp
 import optax
 from flax.training import train_state
 from networks.drnd_network import DRNDNetwork
+import chex
 
 
 class DRND:
@@ -24,15 +25,22 @@ class DRND:
             tx=self.optimizer
         )
 
-    def compute_intrinsic_reward(self, obs):
+    def compute_intrinsic_reward(self, obs, global_step, max_steps):
         mean_pred, std_pred = self.predictor.apply(self.train_state.params, obs)
         mean_target, std_target = self.target.apply(self.target_params, obs)
 
-        # Compute Mahalanobis distance
-        diff = mean_pred - mean_target
-        intrinsic_reward = jnp.sum((diff ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
+        b1 = jnp.sum((mean_pred - mean_target) ** 2 / (std_pred ** 2 + 1e-8), axis=-1)
+
+        b2 = jnp.sum((std_pred ** 2 - std_target ** 2) / (std_pred ** 2 + 1e-8), axis=-1)
+
+        alpha = self.dynamic_alpha(global_step, max_steps)  # TODO: Could make it dynamic
+        intrinsic_reward = alpha * b1 + (1 - alpha) * b2
 
         return intrinsic_reward
+
+    def dynamic_alpha(self, global_step, max_steps):
+        # Decrease alpha from 1 to 0 as training progresses
+        return max(0, 1 - global_step / max_steps)
 
     @partial(jax.jit, static_argnums=0)
     def update_step(self, train_state, obs):
@@ -44,6 +52,7 @@ class DRND:
             loss = jnp.mean(jnp.sum((diff ** 2) / (std_pred ** 2 + 1e-8) + jnp.log(std_pred ** 2 + 1e-8), axis=-1))
             return loss
 
+        chex.assert_max_traces(1)
         grads = jax.grad(loss_fn)(train_state.params)
         new_train_state = train_state.apply_gradients(grads=grads)
         return new_train_state

@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py", line 98, in <module>
+    agent = make_agent(config["agent_type"], envs, config)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/__init__.py", line 15, in make_agent
+    return DRNDPPOAgent(envs, config)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/drnd_ppo_agent.py", line 39, in __init__
+    self.drnd = DRNDPredictor(obs_shape=self.obs_shape, config=config)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/flax/linen/kw_only_dataclasses.py", line 235, in init_wrapper
+    dataclass_init(self, *args, **kwargs)
+TypeError: DRNDPredictor.__init__() got an unexpected keyword argument 'obs_shape'

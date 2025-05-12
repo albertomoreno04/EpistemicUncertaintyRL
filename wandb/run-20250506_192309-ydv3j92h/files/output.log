@@ -1,0 +1,5 @@
+Reward: 0.00:   0%|                                                                                                                                                                                     | 0/100000 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py", line 147, in <module>
+    agent.record_step(obs, next_obs, actions, rewards, terminations, infos, global_step, args.total_timesteps)
+TypeError: DRNDPPOAgent.record_step() takes 7 positional arguments but 9 were given

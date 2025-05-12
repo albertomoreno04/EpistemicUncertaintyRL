@@ -85,7 +85,7 @@ class EpsilonGreedyAgent:
             )
         )
 
-    def record_step(self, obs, next_obs, actions, rewards, terminations, infos):
+    def record_step(self, obs, next_obs, actions, rewards, terminations, infos, global_step, max_steps):
         real_next_obs = next_obs.copy()
         for idx, trunc in enumerate(terminations):
             if trunc:

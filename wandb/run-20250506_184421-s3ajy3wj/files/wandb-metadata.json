@@ -1,0 +1,44 @@
+{
+  "os":  "macOS-14.6.1-arm64-arm-64bit",
+  "python":  "CPython 3.10.17",
+  "startedAt":  "2025-05-06T16:44:21.166479Z",
+  "program":  "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py",
+  "codePath":  "main.py",
+  "git":  {
+    "remote":  "https://github.com/albertomoreno04/EpistemicUncertaintyRL.git",
+    "commit":  "5b7e04c680d8cdbf86092097fded2105e02e4761"
+  },
+  "email":  "A.MorenoSanchez@student.tudelft.nl",
+  "root":  "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL",
+  "host":  "Albertos-Laptop.local",
+  "executable":  "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/bin/python3",
+  "codePathLocal":  "main.py",
+  "cpu_count":  8,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "494384795648",
+      "used":  "242474647552"
+    },
+    "/System/Volumes/Data":  {
+      "total":  "494384795648",
+      "used":  "242474647552"
+    }
+  },
+  "memory":  {
+    "total":  "17179869184"
+  },
+  "cpu":  {
+    "count":  8,
+    "countLogical":  8
+  },
+  "apple":  {
+    "name":  "Apple M2",
+    "ecpuCores":  4,
+    "pcpuCores":  4,
+    "gpuCores":  10,
+    "memoryGb":  16,
+    "swapTotalBytes":  "11811160064",
+    "ramTotalBytes":  "17179869184"
+  }
+}
