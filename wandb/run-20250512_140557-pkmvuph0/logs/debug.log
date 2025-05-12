@@ -1,0 +1,23 @@
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_setup.py:_flush():67] Current SDK version is 0.19.9
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_setup.py:_flush():67] Configure stats pid to 83613
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_setup.py:_flush():67] Loading settings from /Users/albertomoreno/.config/wandb/settings
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_setup.py:_flush():67] Loading settings from /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/settings
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_setup.py:_flush():67] Loading settings from environment variables
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_init.py:setup_run_log_directory():662] Logging user logs to /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250512_140557-pkmvuph0/logs/debug.log
+2025-05-12 14:05:57,307 INFO    MainThread:83613 [wandb_init.py:setup_run_log_directory():663] Logging internal logs to /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250512_140557-pkmvuph0/logs/debug-internal.log
+2025-05-12 14:05:57,314 INFO    MainThread:83613 [wandb_init.py:init():781] calling init triggers
+2025-05-12 14:05:57,314 INFO    MainThread:83613 [wandb_init.py:init():786] wandb.init called with sweep_config: {}
+config: {'exp_name': 'main', 'seed': 42, 'track': True, 'wandb_project_name': 'nanodqn', 'capture_video': True, 'save_model': False, 'agent_type': 'rnd', 'env_id': 'MountainCar-v0', 'total_timesteps': 100000, 'num_envs': 1, 'buffer_size': 100000, 'batch_size': 64, '_wandb': {'code_path': 'code/main.py'}}
+2025-05-12 14:05:57,314 INFO    MainThread:83613 [wandb_init.py:init():809] starting backend
+2025-05-12 14:05:57,314 INFO    MainThread:83613 [wandb_init.py:init():813] sending inform_init request
+2025-05-12 14:05:57,337 INFO    MainThread:83613 [backend.py:_multiprocessing_setup():101] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2025-05-12 14:05:57,337 INFO    MainThread:83613 [wandb_init.py:init():823] backend started and connected
+2025-05-12 14:05:57,339 INFO    MainThread:83613 [wandb_init.py:init():915] updated telemetry
+2025-05-12 14:05:57,357 INFO    MainThread:83613 [wandb_init.py:init():939] communicating run to backend with 90.0 second timeout
+2025-05-12 14:05:57,961 INFO    MainThread:83613 [wandb_init.py:init():1014] starting run threads in backend
+2025-05-12 14:05:58,070 INFO    MainThread:83613 [wandb_run.py:_console_start():2454] atexit reg
+2025-05-12 14:05:58,070 INFO    MainThread:83613 [wandb_run.py:_redirect():2306] redirect: wrap_raw
+2025-05-12 14:05:58,070 INFO    MainThread:83613 [wandb_run.py:_redirect():2371] Wrapping output streams.
+2025-05-12 14:05:58,070 INFO    MainThread:83613 [wandb_run.py:_redirect():2394] Redirects installed.
+2025-05-12 14:05:58,071 INFO    MainThread:83613 [wandb_init.py:init():1056] run started, returning control to user process
+2025-05-12 14:06:39,085 INFO    MsgRouterThr:83613 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 1 handles.

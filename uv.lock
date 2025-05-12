@@ -984,6 +984,7 @@ name = "nanodqn"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "chex" },
     { name = "flax" },
     { name = "gymnasium", extra = ["classic-control"] },
     { name = "moviepy" },
@@ -998,6 +999,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "chex", specifier = ">=0.1.89" },
     { name = "flax" },
     { name = "gymnasium", extras = ["classic-control"], specifier = "<1" },
     { name = "moviepy" },

@@ -1,0 +1,34 @@
+2025-05-08 17:31:47,807 INFO    MainThread:37746 [wandb_setup.py:_flush():67] Current SDK version is 0.19.9
+2025-05-08 17:31:47,807 INFO    MainThread:37746 [wandb_setup.py:_flush():67] Configure stats pid to 37746
+2025-05-08 17:31:47,807 INFO    MainThread:37746 [wandb_setup.py:_flush():67] Loading settings from /Users/albertomoreno/.config/wandb/settings
+2025-05-08 17:31:47,807 INFO    MainThread:37746 [wandb_setup.py:_flush():67] Loading settings from /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/settings
+2025-05-08 17:31:47,807 INFO    MainThread:37746 [wandb_setup.py:_flush():67] Loading settings from environment variables
+2025-05-08 17:31:47,808 INFO    MainThread:37746 [wandb_init.py:setup_run_log_directory():662] Logging user logs to /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250508_173147-biiz85g1/logs/debug.log
+2025-05-08 17:31:47,808 INFO    MainThread:37746 [wandb_init.py:setup_run_log_directory():663] Logging internal logs to /Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250508_173147-biiz85g1/logs/debug-internal.log
+2025-05-08 17:31:47,815 INFO    MainThread:37746 [wandb_init.py:init():781] calling init triggers
+2025-05-08 17:31:47,816 INFO    MainThread:37746 [wandb_init.py:init():786] wandb.init called with sweep_config: {}
+config: {'exp_name': 'main', 'seed': 42, 'track': True, 'wandb_project_name': 'nanodqn', 'capture_video': True, 'save_model': False, 'agent_type': 'drnd_ppo', 'env_id': 'CartPole-v1', 'total_timesteps': 100000, 'num_envs': 1, 'buffer_size': 100000, 'batch_size': 64, '_wandb': {'code_path': 'code/main.py'}}
+2025-05-08 17:31:47,816 INFO    MainThread:37746 [wandb_init.py:init():809] starting backend
+2025-05-08 17:31:47,816 INFO    MainThread:37746 [wandb_init.py:init():813] sending inform_init request
+2025-05-08 17:31:47,837 INFO    MainThread:37746 [backend.py:_multiprocessing_setup():101] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2025-05-08 17:31:47,837 INFO    MainThread:37746 [wandb_init.py:init():823] backend started and connected
+2025-05-08 17:31:47,839 INFO    MainThread:37746 [wandb_init.py:init():915] updated telemetry
+2025-05-08 17:31:47,859 INFO    MainThread:37746 [wandb_init.py:init():939] communicating run to backend with 90.0 second timeout
+2025-05-08 17:32:20,171 WARNING MainThread:37746 [wandb_init.py:init():1534] [no run ID] interrupted
+Traceback (most recent call last):
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 1530, in init
+    return wi.init(run_settings, run_config)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 965, in init
+    result = wait_with_progress(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 24, in wait_with_progress
+    return wait_all_with_progress(
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/wandb/sdk/mailbox/wait_with_progress.py", line 87, in wait_all_with_progress
+    return asyncio_compat.run(progress_loop_with_timeout)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/lib/python3.10/site-packages/wandb/sdk/lib/asyncio_compat.py", line 30, in run
+    return future.result()
+  File "/Users/albertomoreno/.local/share/uv/python/cpython-3.10.17-macos-aarch64-none/lib/python3.10/concurrent/futures/_base.py", line 453, in result
+    self._condition.wait(timeout)
+  File "/Users/albertomoreno/.local/share/uv/python/cpython-3.10.17-macos-aarch64-none/lib/python3.10/threading.py", line 320, in wait
+    waiter.acquire()
+KeyboardInterrupt
+2025-05-08 17:32:20,327 INFO    MsgRouterThr:37746 [mailbox.py:close():129] [no run ID] Closing mailbox, abandoning 1 handles.

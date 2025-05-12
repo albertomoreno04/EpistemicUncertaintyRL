@@ -1,0 +1,11 @@
+Reward: 0.00:   0%|                                                                                                                                                                                     | 0/100000 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py", line 147, in <module>
+    agent.record_step(obs, next_obs, actions, rewards, terminations, infos, global_step, progress_bar)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/drnd_agent.py", line 62, in record_step
+    intrinsic_reward = self.drnd.compute_intrinsic_reward(obs, global_step, max_steps)
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/exploration/drnd.py", line 35, in compute_intrinsic_reward
+    alpha = self.dynamic_alpha(global_step, max_steps)  # TODO: Could make it dynamic
+  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/exploration/drnd.py", line 42, in dynamic_alpha
+    return max(0, 1 - global_step / max_steps)
+TypeError: unsupported operand type(s) for /: 'int' and 'tqdm_asyncio'

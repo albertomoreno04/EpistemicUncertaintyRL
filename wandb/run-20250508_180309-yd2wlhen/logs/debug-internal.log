@@ -1,0 +1,15 @@
+{"time":"2025-05-08T18:03:09.260229+02:00","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/wandb/run-20250508_180309-yd2wlhen/logs/debug-core.log"}
+{"time":"2025-05-08T18:03:09.549493+02:00","level":"INFO","msg":"created new stream","id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:09.549694+02:00","level":"INFO","msg":"stream: started","id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:09.549848+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:09.549869+02:00","level":"INFO","msg":"sender: started","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:09.549945+02:00","level":"INFO","msg":"handler: started","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:10.064947+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-05-08T18:03:49.417506+02:00","level":"INFO","msg":"stream: closing","id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:49.418645+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-05-08T18:03:49.418702+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-05-08T18:03:50.041309+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-05-08T18:03:51.436037+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:51.436062+02:00","level":"INFO","msg":"sender: closed","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:51.43702+02:00","level":"INFO","msg":"handler: closed","stream_id":"yd2wlhen"}
+{"time":"2025-05-08T18:03:51.438087+02:00","level":"INFO","msg":"stream: closed","id":"yd2wlhen"}

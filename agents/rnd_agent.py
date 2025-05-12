@@ -60,7 +60,7 @@ class RNDAgent:
 
         return np.array([action])
 
-    def record_step(self, obs, next_obs, actions, rewards, dones, infos):
+    def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step, max_steps):
         # Compute intrinsic reward
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         total_reward = rewards + self.config["intrinsic_coef"] * intrinsic_reward

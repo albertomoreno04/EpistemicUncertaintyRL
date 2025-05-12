@@ -2,6 +2,7 @@ from functools import partial
 
 import jax
 import jax.numpy as jnp
+import chex
 import flax
 import optax
 import numpy as np
@@ -44,6 +45,7 @@ class DRNDAgent:
 
     @partial(jax.jit, static_argnums=0)
     def _select_action_jit(self, params, obs, key):
+        chex.assert_max_traces(1)
         logits = self.policy.apply({"params": params}, obs)
         action = jax.random.categorical(key, logits)
         return action
@@ -58,8 +60,8 @@ class DRNDAgent:
 
         return np.array([action])
 
-    def record_step(self, obs, next_obs, actions, rewards, dones, infos):
-        intrinsic_reward = self.drnd.compute_intrinsic_reward(obs)
+    def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step, max_steps):
+        intrinsic_reward = self.drnd.compute_intrinsic_reward(obs, global_step, max_steps)
         total_reward = rewards + self.config["intrinsic_reward_scale"] * intrinsic_reward
         self.rb.add(obs, next_obs, actions, total_reward, dones, infos)
 
@@ -119,6 +121,7 @@ class DRNDAgent:
             loss = -jnp.mean(selected_log_probs * rewards)
             return loss
 
+        chex.assert_max_traces(1)
         loss, grads = jax.value_and_grad(loss_fn)(policy_state.params)
         updates, policy_opt_state = self.optimizer.update(grads, policy_opt_state)
         policy_state = policy_state.replace(params=optax.apply_updates(policy_state.params, updates))
