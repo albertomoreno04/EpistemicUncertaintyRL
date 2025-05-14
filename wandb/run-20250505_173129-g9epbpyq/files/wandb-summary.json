@@ -1,1 +1,0 @@
-{"_timestamp":1.7464591742510028e+09,"_step":9287,"_wandb":{"runtime":85},"charts/SPS":111,"charts/episodic_length":10,"losses/policy_loss":-74.65408325195312,"charts/episodic_return":10,"drnd/mean_reward":-115.10308837890625,"_runtime":84.959003}
