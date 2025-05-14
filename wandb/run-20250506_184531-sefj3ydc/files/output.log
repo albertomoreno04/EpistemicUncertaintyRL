@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py", line 98, in <module>
-    agent = make_agent(config["agent_type"], envs, config)
-  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/__init__.py", line 15, in make_agent
-    return DRNDPPOAgent(envs, config)
-  File "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/agents/drnd_ppo_agent.py", line 54, in __init__
-    self.update_proportion = config["update_proportion"]
-KeyError: 'update_proportion'
