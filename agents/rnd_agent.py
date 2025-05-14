@@ -55,15 +55,19 @@ class RNDAgent:
         action = self._select_action_jit(self.policy_state.params, obs, key)
         action = jax.device_get(action)
 
-        if isinstance(action, np.ndarray):
-            action = action.item()
+        action = np.asarray(action)
 
-        return np.array([action])
+        if action.ndim == 0 or action.size == 1:
+            return np.array([action.item()])
+
+        return action
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step, max_steps):
         # Compute intrinsic reward
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
-        total_reward = rewards + self.config["intrinsic_coef"] * intrinsic_reward
+        extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
+        intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
+        total_reward = extrinsic_coef * rewards + intrinsic_coef * intrinsic_reward
 
         self.rb.add(obs, next_obs, actions, total_reward, dones, infos)
 
