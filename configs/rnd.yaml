@@ -1,10 +1,10 @@
 # configs/rnd.yaml
 
-env_id: "MountainCar-v0"
-env_name: MountainCar-v0
+env_id: "ALE/MontezumaRevenge-v5"
+env_name: ALE/MontezumaRevenge-v5
 exp_name: "rnd_experiment"
 num_envs: 1
-total_timesteps: 100000
+total_timesteps: 10000000
 learning_rate: 0.0003
 gamma: 0.99
 buffer_size: 100000
