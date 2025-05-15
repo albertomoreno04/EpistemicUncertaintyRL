@@ -38,8 +38,10 @@ if __name__ == "__main__":
 
     with wandb.init(config=config) as run:
         config.update(dict(run.config))
-        config["predictor_hidden_dim"] = config["hidden_dim"]
-        config["target_hidden_dim"] = config["hidden_dim"]
+        hidden_dim = config.get("hidden_dim")
+        if hidden_dim is not None:
+            config["predictor_hidden_dim"] = hidden_dim
+            config["target_hidden_dim"] = hidden_dim
 
         run_name = f"{config['env_id']}_{hex(int(time.time()) % 65536)}"
 
