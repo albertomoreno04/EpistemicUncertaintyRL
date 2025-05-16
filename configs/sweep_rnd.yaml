@@ -16,7 +16,7 @@ parameters:
     values: [0.99, 0.995]
 
   intrinsic_coef:
-    values: [0.5, 1.0, 2.0]
+    values: [0.25, 0.5, 1.0]
 
   extrinsic_coef:
     values: [1.0, 2.0]
