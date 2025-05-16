@@ -22,7 +22,7 @@ class RNDAgent:
 
 
         self.policy = PolicyModel(obs_shape[0], action_dim)
-        dummy_obs = jnp.zeros((1, obs_shape[0]))
+        dummy_obs = jnp.zeros((1,) + obs_shape, dtype=jnp.float32)
         self.rng = jax.random.PRNGKey(config["seed"])
         self.policy_params = self.policy.init(jax.random.PRNGKey(config["seed"] + 1), dummy_obs)
 
@@ -57,10 +57,7 @@ class RNDAgent:
 
         action = np.asarray(action)
 
-        if action.ndim == 0 or action.size == 1:
-            return np.array([action.item()])
-
-        return action
+        return np.atleast_1d(action).astype(np.int32)
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step, max_steps):
         # Compute intrinsic reward

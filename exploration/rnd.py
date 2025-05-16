@@ -11,6 +11,7 @@ class RNDNetwork(nn.Module):
 
     @nn.compact
     def __call__(self, x):
+        x = x.reshape((x.shape[0], -1))
         x = nn.relu(nn.Dense(self.hidden_dim)(x))
         x = nn.relu(nn.Dense(self.hidden_dim)(x))
         return nn.Dense(self.hidden_dim)(x)
@@ -19,7 +20,7 @@ class RND:
     def __init__(self, obs_shape, config):
         self.predictor = RNDNetwork(config["predictor_hidden_dim"])
         self.target = RNDNetwork(config["target_hidden_dim"])
-        dummy_input = jnp.zeros(obs_shape)
+        dummy_input = jnp.zeros((1,) + obs_shape, dtype=jnp.float32)
         self.predictor_params = self.predictor.init(jax.random.PRNGKey(0), dummy_input)
         self.target_params = self.target.init(jax.random.PRNGKey(1), dummy_input)
         self.optimizer = optax.adam(config["learning_rate"])

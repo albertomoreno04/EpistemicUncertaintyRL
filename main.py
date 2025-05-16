@@ -66,13 +66,14 @@ if __name__ == "__main__":
             envs.single_action_space, gym.spaces.Discrete
         ), "Only discrete action space is supported"
 
+        obs, _ = envs.reset(seed=config["seed"])
+
         agent = make_agent(config["agent_type"], envs, config)
 
         start_time = time.time()  # start timer for SPS (steps-per-second) computation
         last_mean_rs = 0  # the average reward, reporting purposes
 
         # TRY NOT TO MODIFY: start the game
-        obs, _ = envs.reset(seed=config["seed"])
         progress_bar = tqdm(range(config["total_timesteps"]))
 
         # For recording videos at 10% intervals
