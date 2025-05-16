@@ -1,7 +1,7 @@
 # configs/rnd.yaml
 
-env_id: "ALE/MontezumaRevenge-v5"
-env_name: ALE/MontezumaRevenge-v5
+env_id: "CartPole-v1"
+env_name: CartPole-v1
 exp_name: "rnd_experiment"
 num_envs: 1
 total_timesteps: 100000
