@@ -7,8 +7,8 @@ num_envs: 1
 total_timesteps: 100000
 learning_rate: 0.0003
 gamma: 0.99
-buffer_size: 100000
-batch_size: 32
+buffer_size: 10000
+batch_size: 16
 exploration_final_eps: 0.01
 target_network_frequency: 500
 seed: 42
@@ -17,8 +17,8 @@ agent_type: rnd
 wandb_project_name: "nanodqn"
 save_model: false
 track: true
-predictor_hidden_dim: 64
-target_hidden_dim: 64
+predictor_hidden_dim: 32
+target_hidden_dim: 32
 intrinsic_coef: 1.0
 extrinsic_coef: 1.0
 predictor_update_freq: 1
