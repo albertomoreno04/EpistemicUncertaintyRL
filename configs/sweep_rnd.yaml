@@ -6,7 +6,7 @@ metric:
 
 parameters:
   batch_size:
-    values: [32, 64, 128]
+    values: [32, 64]
 
   learning_rate:
     min: 0.00005
@@ -25,8 +25,8 @@ parameters:
     values: [1, 8, 16, 32, 64]
 
   hidden_dim: # For target and predictor
-    values: [ 64, 128, 256 ]
+    values: [ 64, 128]
 
   predictor_update_freq:
-    values: [1, 2, 4]
+    values: [2, 4]
 
