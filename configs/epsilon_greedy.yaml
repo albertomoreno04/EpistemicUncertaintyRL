@@ -4,6 +4,7 @@
 # General experiment information
 agent_type: epsilon_greedy
 env_name: CartPole-v1
+env_id: "CartPole-v1"
 seed: 42
 track: true
 capture_video: true
