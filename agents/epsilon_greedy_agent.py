@@ -75,7 +75,8 @@ class EpsilonGreedyAgent:
         )
         self.log_info = {
             "losses/td_loss": jax.device_get(loss),
-            "losses/q_values": jax.device_get(old_val).mean(),
+            "exploration/extrinsic_reward": float(jnp.mean(data.rewards)),
+            "exploration/episode_count": float(jnp.sum(data.dones)),
         }
 
     def update_target_network(self):
@@ -85,7 +86,7 @@ class EpsilonGreedyAgent:
             )
         )
 
-    def record_step(self, obs, next_obs, actions, rewards, terminations, infos, global_step, max_steps):
+    def record_step(self, obs, next_obs, actions, rewards, terminations, infos, global_step):
         real_next_obs = next_obs.copy()
         for idx, trunc in enumerate(terminations):
             if trunc:
@@ -102,6 +103,7 @@ class EpsilonGreedyAgent:
             self.epsilon, self.epsilon_final,
             self.exploration_fraction * self.total_timesteps, global_step
         )
+        self.log_info["exploration/epsilon"] = epsilon
         if random.random() < epsilon:
             actions = np.array([self.envs.single_action_space.sample() for _ in range(self.envs.num_envs)])
         else:

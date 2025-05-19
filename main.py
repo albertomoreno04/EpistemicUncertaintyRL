@@ -116,19 +116,17 @@ if __name__ == "__main__":
                 progress_bar.set_description_str(f"Reward: {float(last_mean_rs):.2f}")
 
             # save data to reply buffer; handle `final_observation`
-            agent.record_step(obs, next_obs, actions, rewards, terminations, infos, global_step, config["total_timesteps"])
+            agent.record_step(obs, next_obs, actions, rewards, terminations, infos, global_step)
             agent.train_step(global_step)
 
             # CRUCIAL step easy to overlook, moving to the new observations
             obs = next_obs
 
-            if global_step % 1000 == 0 and config.get("track", False):
-                wandb.log(agent.log_metrics(global_step, start_time), commit=False)
+            if global_step % 500 == 0 and config.get("track", False):
+                wandb.log(agent.log_metrics(global_step, start_time), commit=True)
 
-            if hasattr(agent, "update_target_network"):
-                if "target_network_frequency" in config:
-                    if global_step % config["target_network_frequency"] == 0:
-                        agent.update_target_network()
+            if global_step % config["target_network_frequency"] == 0:
+                agent.update_target_network()
 
         if config["save_model"]:  # even more reporting
             os.makedirs(f"runs/{run_name}", exist_ok=True)
