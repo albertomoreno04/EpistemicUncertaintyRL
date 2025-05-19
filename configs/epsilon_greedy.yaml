@@ -21,7 +21,7 @@ learning_starts: 10000
 
 # Training parameters
 total_timesteps: 100000
-batch_size: 64
+batch_size: 16
 buffer_size: 100000
 gamma: 0.99
 tau: 1.0
