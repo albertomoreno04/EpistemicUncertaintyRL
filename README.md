@@ -1,2 +1,2 @@
 # EpistemicUncertaintyRL
-Exploring Epistemic Uncertainty in Reinforcement Learning through (Distributional) Random Network Distillation
+Exploring Epistemic Uncertainty in Reinforcement Learning through Random Network Distillation
