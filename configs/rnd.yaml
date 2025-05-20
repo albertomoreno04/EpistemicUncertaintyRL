@@ -10,7 +10,6 @@ gamma: 0.99
 tau: 1.0
 buffer_size: 10000
 batch_size: 16
-exploration_final_eps: 0.01
 target_network_frequency: 500
 seed: 42
 capture_video: true
