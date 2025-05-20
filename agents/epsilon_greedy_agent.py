@@ -61,22 +61,23 @@ class EpsilonGreedyAgent:
         return max(slope * t + start_e, end_e)
 
     def train_step(self, global_step):
-        if global_step < self.learning_starts or global_step % self.train_frequency != 0:
+        if not self.rb.can_sample(self.config["batch_size"]):
             return
 
-        data = self.rb.sample(self.config["batch_size"])
+        batch = self.rb.sample(self.config["batch_size"])
         loss, old_val, self.q_state = self.update(
             self.q_state,
-            data.observations,
-            data.actions,
-            data.next_observations,
-            data.rewards.flatten(),
-            data.dones.flatten(),
+            batch.observations,
+            batch.actions,
+            batch.next_observations,
+            batch.rewards.flatten(),
+            batch.dones.flatten(),
         )
+
         self.log_info = {
             "losses/td_loss": jax.device_get(loss),
-            "exploration/extrinsic_reward": float(jnp.mean(data.rewards)),
-            "exploration/episode_count": float(jnp.sum(data.dones)),
+            "exploration/extrinsic_reward": float(jnp.mean(batch.rewards)),
+            "exploration/episode_count": float(jnp.sum(batch.dones)),
         }
 
     def update_target_network(self):

@@ -1,6 +1,12 @@
 import gymnasium as gym
 
 
+class AddStateToInfoWrapper(gym.Wrapper):
+    def step(self, action):
+        obs, reward, terminated, truncated, info = self.env.step(action)
+        info["state"] = tuple(obs)
+        return obs, reward, terminated, truncated, info
+
 def make_env(env_id, seed, idx, capture_video, run_name):
     def thunk():
         if capture_video and idx == 0:
@@ -12,6 +18,7 @@ def make_env(env_id, seed, idx, capture_video, run_name):
         else:
             env = gym.make(env_id)
         env = gym.wrappers.RecordEpisodeStatistics(env)
+        env = AddStateToInfoWrapper(env)
         env.action_space.seed(seed)
 
         return env

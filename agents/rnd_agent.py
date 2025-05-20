@@ -11,7 +11,6 @@ import os
 from flax.training.train_state import TrainState
 from utils.replay_buffer import ReplayBuffer
 from exploration.rnd import RND
-from networks.rnd_networks import PolicyModel
 from networks.q_network import QNetwork
 
 class TrainState(TrainState):
@@ -47,6 +46,9 @@ class RNDAgent:
         self.epsilon_final = self.config["epsilon_final"]
         self.exploration_fraction = self.config["exploration_fraction"]
         self.total_timesteps = self.config["total_timesteps"]
+
+        self.unique_state_ids = set()
+        self.seen_jax_hashes = set()
 
         self.rb = ReplayBuffer(
             config["buffer_size"],
@@ -89,6 +91,10 @@ class RNDAgent:
         total_reward = extrinsic_coef * rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
+        if "final_info" in infos:
+            for info in infos["final_info"]:
+                if info and "state" in info:
+                    self.unique_state_ids.add(info["state"])
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
@@ -97,6 +103,7 @@ class RNDAgent:
             "rewards/max_extrinsic": float(jnp.max(rewards)),
             "rewards/max_intrinsic": float(jnp.max(intrinsic_reward)),
             "steps/global": global_step,
+            "exploration/unique_states_env": len(self.unique_state_ids),
         })
 
         self.rb.add(obs, next_obs, actions, total_reward, dones, infos)
@@ -114,7 +121,6 @@ class RNDAgent:
             batch.dones,
         )
 
-        # Policy gradient update (placeholder, customize for PPO, A2C, etc.)
         loss, grad_mse, q_pred, td_target, new_params, new_opt_state = self.update(
             self.q_state.params, self.q_state.target_params, self.q_state.opt_state, obs, actions.squeeze(), next_obs,
             rewards.flatten(), dones.flatten()
