@@ -48,7 +48,6 @@ class RNDAgent:
         self.total_timesteps = self.config["total_timesteps"]
 
         self.unique_state_ids = set()
-        self.seen_jax_hashes = set()
 
         self.rb = ReplayBuffer(
             config["buffer_size"],
@@ -103,7 +102,7 @@ class RNDAgent:
             "rewards/max_extrinsic": float(jnp.max(rewards)),
             "rewards/max_intrinsic": float(jnp.max(intrinsic_reward)),
             "steps/global": global_step,
-            "exploration/unique_states_env": len(self.unique_state_ids),
+            "exploration/unique_states": len(self.unique_state_ids),
         })
 
         self.rb.add(obs, next_obs, actions, total_reward, dones, infos)

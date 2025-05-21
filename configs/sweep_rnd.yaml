@@ -1,4 +1,4 @@
-method: random
+method: bayes
 program: main.py
 metric:
   name: eval/average_reward
@@ -18,10 +18,7 @@ parameters:
   extrinsic_coef:
     values: [0.25, 0.5, 1.0, 2.0]
 
-  num_envs:
-    values: [1, 8, 16, 32, 64]
-
-  hidden_dim: # For target and predictor
+  hidden_dim:
     values: [ 64, 128]
 
   predictor_update_freq:
