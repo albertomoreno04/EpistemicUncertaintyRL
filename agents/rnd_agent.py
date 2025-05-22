@@ -73,6 +73,7 @@ class RNDAgent:
             self.epsilon, self.epsilon_final,
             self.exploration_fraction * self.total_timesteps, global_step
         )
+        self.log_info["exploration/epsilon"] = epsilon
 
         if random.random() < epsilon:
             actions = np.array([self.envs.single_action_space.sample() for _ in range(self.envs.num_envs)])
@@ -93,7 +94,10 @@ class RNDAgent:
         if "final_info" in infos:
             for info in infos["final_info"]:
                 if info and "state" in info:
-                    self.unique_state_ids.add(info["state"])
+                    try:
+                        self.unique_state_ids.add(info["state"])
+                    except Exception as e:
+                        print("Warning: Could not hash state:", e)
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
