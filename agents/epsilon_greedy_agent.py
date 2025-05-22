@@ -65,7 +65,7 @@ class EpsilonGreedyAgent:
             return
 
         batch = self.rb.sample(self.config["batch_size"])
-        loss, old_val, self.q_state = self.update(
+        loss, grad_mse, q_pred, td_target, self.q_state = self.update(
             self.q_state,
             batch.observations,
             batch.actions,
@@ -74,10 +74,22 @@ class EpsilonGreedyAgent:
             batch.dones.flatten(),
         )
 
+        num_actions = self.envs.single_action_space.n
+        one_hot_actions = jax.nn.one_hot(batch.actions.squeeze(), num_actions)
+        p_a_t = jnp.mean(one_hot_actions, axis=0)
+        entropy = -jnp.sum(p_a_t * jnp.log(p_a_t + 1e-12))
+
         self.log_info = {
             "losses/td_loss": jax.device_get(loss),
-            "exploration/extrinsic_reward": float(jnp.mean(batch.rewards)),
+            "q/mean_q": float(jnp.mean(q_pred)),
+            "q/mean_target": float(jnp.mean(td_target)),
+            "q/grad_mse": float(grad_mse),
+            "exploration/entropy": float(entropy),
+            "exploration/extrinsic_mean": float(jnp.mean(batch.rewards)),
+            "rewards/total_mean": float(jnp.mean(batch.rewards)),
+            "rewards/max_extrinsic": float(jnp.max(batch.rewards)),
             "exploration/episode_count": float(jnp.sum(batch.dones)),
+            "steps/global": global_step,
         }
 
     def update_target_network(self):
@@ -117,13 +129,18 @@ class EpsilonGreedyAgent:
     def update(self, q_state, observations, actions, next_observations, rewards, dones):
         q_next_target = self.q_network.apply(q_state.target_params, next_observations)
         q_next_target = jnp.max(q_next_target, axis=-1)
-        next_q_value = rewards + (1 - dones) * self.config["gamma"] * q_next_target
+        td_target = rewards + (1 - dones) * self.config["gamma"] * q_next_target
 
         def mse_loss(params):
             q_pred = self.q_network.apply(params, observations)
             q_pred = q_pred[jnp.arange(q_pred.shape[0]), actions.squeeze()]
-            return ((q_pred - next_q_value) ** 2).mean(), q_pred
+            return ((q_pred - td_target) ** 2).mean(), q_pred
 
         (loss_value, q_pred), grads = jax.value_and_grad(mse_loss, has_aux=True)(q_state.params)
+
+        squared_grad_norms = jax.tree_util.tree_map(lambda g: jnp.mean(g ** 2), grads)
+        flat_grads, _ = jax.flatten_util.ravel_pytree(squared_grad_norms)
+        grad_mse = jnp.mean(flat_grads)
+
         q_state = q_state.apply_gradients(grads=grads)
-        return loss_value, q_pred, q_state
+        return loss_value, grad_mse, q_pred, td_target, q_state
