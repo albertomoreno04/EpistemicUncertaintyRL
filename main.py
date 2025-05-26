@@ -137,6 +137,7 @@ if __name__ == "__main__":
 
             from cleanrl_utils.evals.dqn_jax_eval import evaluate
 
+            epsilon_eval = 0.0 if config["agent_type"] == "rnd" else 0.05
             episodic_returns = evaluate(
                 model_path,
                 make_env,
@@ -144,7 +145,7 @@ if __name__ == "__main__":
                 eval_episodes=10,
                 run_name=f"{run_name}-eval",
                 Model=QNetwork,
-                epsilon=0.05,
+                epsilon=epsilon_eval,
             )
             if config["track"]:
                 wandb.log({"eval/episodic_return_mean": episodic_returns.mean()})

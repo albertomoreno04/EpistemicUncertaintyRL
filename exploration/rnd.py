@@ -34,6 +34,7 @@ class RND:
         target = self.target.apply(self.target_params, obs)
         return jnp.mean(jnp.square(pred - target), axis=-1)
 
+    @partial(jax.jit, static_argnums=0)
     def update(self, obs):
         def loss_fn(params):
             pred = self.predictor.apply(params, obs)
@@ -41,5 +42,7 @@ class RND:
             loss = jnp.mean(jnp.square(pred - target))
             return loss
 
+        loss = loss_fn(self.train_state.params)
         grads = jax.grad(loss_fn)(self.train_state.params)
         self.train_state = self.train_state.apply_gradients(grads=grads)
+        return loss

@@ -42,9 +42,6 @@ class RNDAgent:
         self.gamma = self.config["gamma"]
 
         self.total_extrinsic_reward = 0.0
-        self.epsilon = self.config["epsilon"]
-        self.epsilon_final = self.config["epsilon_final"]
-        self.exploration_fraction = self.config["exploration_fraction"]
         self.total_timesteps = self.config["total_timesteps"]
 
         self.unique_state_ids = set()
@@ -113,6 +110,10 @@ class RNDAgent:
             batch.rewards,
             batch.dones,
         )
+
+        if global_step % self.config.get("predictor_update_freq", 1) == 0:
+            rnd_loss = self.rnd.update(obs)
+            self.log_info.update({"rnd/predictor_loss": float(rnd_loss)})
 
         loss, grad_mse, q_pred, td_target, new_params, new_opt_state = self.update(
             self.q_state.params, self.q_state.target_params, self.q_state.opt_state, obs, actions.squeeze(), next_obs,
