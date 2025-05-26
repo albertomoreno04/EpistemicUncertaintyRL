@@ -48,8 +48,9 @@ class EpsilonGreedyAgent:
         )
         self.learning_starts = config["learning_starts"]
         self.train_frequency = config["train_frequency"]
-        self.epsilon = config["epsilon_start"]
-        self.epsilon_decay = config["epsilon_decay"]
+        self.epsilon = config["epsilon"]
+        # self.epsilon_decay = config["epsilon_decay"]
+        self.unique_state_ids = set()
         self.epsilon_final = config["epsilon_final"]
         self.exploration_fraction = config["exploration_fraction"]
         self.total_timesteps = config["total_timesteps"]
@@ -89,6 +90,7 @@ class EpsilonGreedyAgent:
             "rewards/total_mean": float(jnp.mean(batch.rewards)),
             "rewards/max_extrinsic": float(jnp.max(batch.rewards)),
             "exploration/episode_count": float(jnp.sum(batch.dones)),
+            "exploration/unique_states": len(self.unique_state_ids),
             "steps/global": global_step,
         }
 
@@ -104,6 +106,15 @@ class EpsilonGreedyAgent:
         for idx, trunc in enumerate(terminations):
             if trunc:
                 real_next_obs[idx] = infos["final_observation"][idx]
+
+        if "final_info" in infos:
+            for info in infos["final_info"]:
+                if info and "state" in info:
+                    try:
+                        self.unique_state_ids.add(info["state"])
+                    except Exception as e:
+                        print("Warning: Could not hash state:", e)
+
         self.rb.add(obs, real_next_obs, actions, rewards, terminations, infos)
 
     def log_metrics(self, global_step, start_time):
@@ -116,7 +127,7 @@ class EpsilonGreedyAgent:
             self.epsilon, self.epsilon_final,
             self.exploration_fraction * self.total_timesteps, global_step
         )
-        self.log_info["exploration/epsilon"] = epsilon
+        self.log_info.update({"exploration/epsilon": float(epsilon)})
         if random.random() < epsilon:
             actions = np.array([self.envs.single_action_space.sample() for _ in range(self.envs.num_envs)])
         else:

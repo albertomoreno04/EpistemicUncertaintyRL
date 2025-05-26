@@ -1,0 +1,55 @@
+{
+    "os": "macOS-14.6.1-arm64-arm-64bit",
+    "python": "CPython 3.10.17",
+    "heartbeatAt": "2025-05-22T14:07:53.259776",
+    "startedAt": "2025-05-22T14:07:52.029311",
+    "docker": null,
+    "args": [
+        "service",
+        "--debug",
+        "--port-filename",
+        "/var/folders/j5/qzd7j4x93699thk_by6rjfn40000gn/T/tmptgn2gqgt/port-69089.txt",
+        "--pid",
+        "69089"
+    ],
+    "state": "running",
+    "program": "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/main.py",
+    "codePathLocal": "main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "https://github.com/albertomoreno04/EpistemicUncertaintyRL.git",
+        "commit": "12ee7bfc0779f93085bcecd8d6abe1525be5f37e"
+    },
+    "email": "amoreno@tudelft.nl",
+    "root": "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL",
+    "host": "Albertos-Laptop.local",
+    "username": null,
+    "executable": "/Users/albertomoreno/Documents/Universidad/Year3/RP/EpistemicUncertaintyRL/.venv/bin/python",
+    "cpu_count": 8,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 3504,
+        "min": 600,
+        "max": 3504
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3504,
+            "min": 600,
+            "max": 3504
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 494384795648,
+            "used": 10268160000
+        },
+        "/System/Volumes/Data": {
+            "total": 494384795648,
+            "used": 228180430848
+        }
+    },
+    "memory": {
+        "total": 17179869184
+    }
+}

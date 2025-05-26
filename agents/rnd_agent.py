@@ -69,17 +69,7 @@ class RNDAgent:
     def select_action(self, obs, global_step):
         self.rng, key = jax.random.split(self.rng)
 
-        epsilon = self.linear_schedule(
-            self.epsilon, self.epsilon_final,
-            self.exploration_fraction * self.total_timesteps, global_step
-        )
-        self.log_info["exploration/epsilon"] = epsilon
-
-        if random.random() < epsilon:
-            actions = np.array([self.envs.single_action_space.sample() for _ in range(self.envs.num_envs)])
-        else:
-            actions = self._select_action_jit(self.q_state.params, obs, key)
-
+        actions = self._select_action_jit(self.q_state.params, obs, key)
         return np.atleast_1d(actions).astype(np.int32)
 
 
@@ -97,7 +87,7 @@ class RNDAgent:
                     try:
                         self.unique_state_ids.add(info["state"])
                     except Exception as e:
-                        print("Warning: Could not hash state:", e)
+                        continue
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),

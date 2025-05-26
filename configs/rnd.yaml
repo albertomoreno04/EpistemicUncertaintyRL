@@ -12,7 +12,8 @@ buffer_size: 10000
 batch_size: 16
 target_network_frequency: 500
 seed: 42
-capture_video: true
+seeds: [42, 1337, 2025, 7, 99]
+capture_video: false
 agent_type: rnd
 wandb_project_name: "EpistemicUncertaintyRL"
 save_model: false
@@ -24,7 +25,7 @@ extrinsic_coef: 2.0
 predictor_update_freq: 1
 
 epsilon: 1.0
-epsilon_final: 0.05
+epsilon_final: 0
 exploration_fraction: 0.9
 train_frequency: 10
 learning_starts: 10000
