@@ -5,20 +5,10 @@ metric:
   goal: maximize
 
 parameters:
-  seed:
-    values: [ 42, 2025, 1337, 7, 99 ]
-  agent_type:
-    values: [ "rnd", "epsilon_greedy" ]
-  epsilon:
-    values: [ 1.0, 0.5 ]
-  epsilon_final:
-    values: [ 0.05, 0.01 ]
-  exploration_fraction:
-    values: [ 0.2, 0.5, 0.9 ]
   extrinsic_coef:
-    values: [0.25, 0.5, 1.0, 2.0]
+    values: [0.25, 1.0, 2.0]
   hidden_dim:
-    values: [ 64, 128]
+    values: [ 32, 64 ]
   predictor_update_freq:
     values: [2, 4]
 

@@ -3,11 +3,11 @@
 
 # General experiment information
 agent_type: epsilon_greedy
-env_name: Acrobot-v1
-env_id: "Acrobot-v1"
+env_name: CartPole-v1
+env_id: "CartPole-v1"
 seed: 42
 track: true
-capture_video: true
+capture_video: false
 save_model: false
 wandb_project_name: "nanodqn"
 exp_name: "epsilon_greedy_experiment"
@@ -20,7 +20,7 @@ exploration_fraction: 0.5
 learning_starts: 10000
 
 # Training parameters
-total_timesteps: 200000
+total_timesteps: 300000
 batch_size: 16
 buffer_size: 100000
 gamma: 0.99

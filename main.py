@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import gymnasium as gym
 import flax
 import yaml
-from environments.make_env import make_env
+from environments.make_env import make_env, make_atari_env
 from networks.q_network import QNetwork
 from agents.rnd_agent import RNDAgent
 from agents.epsilon_greedy_agent import EpsilonGreedyAgent
@@ -30,35 +30,34 @@ class TrainState(TrainState):
     target_params: flax.core.FrozenDict
 
 
-
-if __name__ == "__main__":
-
-    with open("configs/rnd.yaml", "r") as f:
-        config = yaml.safe_load(f)
-
-    with wandb.init(config=config) as run:
-        config.update(dict(run.config))
-        hidden_dim = config.get("hidden_dim")
-        if hidden_dim is not None:
-            config["predictor_hidden_dim"] = hidden_dim
-            config["target_hidden_dim"] = hidden_dim
-
-        run_name = f"{config['env_id']}_{hex(int(time.time()) % 65536)}"
+def run_single_seed(config, seed, group_name):
+        run_name = f"{config['env_id']}_seed{seed}_{hex(int(time.time()) % 65536)}"
 
         if config["track"]:
-            wandb.run.name = run_name
-            wandb.run.save()
+            run = wandb.init(config=config, group=group_name, name=run_name, reinit=True)
+            config.update(dict(run.config))
+            hidden_dim = config.get("hidden_dim")
+            if hidden_dim is not None:
+                config["predictor_hidden_dim"] = hidden_dim
+                config["target_hidden_dim"] = hidden_dim
 
         # TRY NOT TO MODIFY: seeding
-        random.seed(config["seed"])  # for python default library
-        np.random.seed(config["seed"])  # for numpy
-        key = jr.key(config["seed"])  # jax: sets up the key
+        random.seed(seed)  # for python default library
+        np.random.seed(seed)  # for numpy
+        key = jr.key(seed)  # jax: sets up the key
         key, q_key = jr.split(key)  # splits the key in 2
 
         # env setup
+        env_factory = (
+            lambda env_id, seed, idx, capture_video, run_name: make_atari_env(
+                env_id, seed, idx, capture_video, frame_stack=4
+            )
+            if "Montezuma" in config["env_id"] or "ALE/" in config["env_id"]
+            else make_env
+        )
         envs = gym.vector.SyncVectorEnv(
             [
-                make_env(config["env_id"], config["seed"] + i, i, config["capture_video"], run_name)
+                env_factory(config["env_id"], seed + i, i, config["capture_video"], run_name)
                 for i in range(config["num_envs"])
             ]
         )
@@ -66,7 +65,7 @@ if __name__ == "__main__":
             envs.single_action_space, gym.spaces.Discrete
         ), "Only discrete action space is supported"
 
-        obs, _ = envs.reset(seed=config["seed"])
+        obs, _ = envs.reset(seed=seed)
 
         agent = make_agent(config["agent_type"], envs, config)
 
@@ -140,7 +139,7 @@ if __name__ == "__main__":
             epsilon_eval = 0.0 if config["agent_type"] == "rnd" else 0.05
             episodic_returns = evaluate(
                 model_path,
-                make_env,
+                make_atari_env,
                 config["env_id"],
                 eval_episodes=10,
                 run_name=f"{run_name}-eval",
@@ -151,3 +150,15 @@ if __name__ == "__main__":
                 wandb.log({"eval/episodic_return_mean": episodic_returns.mean()})
 
         envs.close()
+
+
+if __name__ == "__main__":
+
+    with open("configs/rnd.yaml", "r") as f:
+        base_config = yaml.safe_load(f)
+
+    seeds = [42]
+    group_name = f"montezuma_{base_config['env_id']}_{int(time.time())}"
+
+    for seed in seeds:
+        run_single_seed(base_config, seed, group_name)
