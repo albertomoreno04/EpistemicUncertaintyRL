@@ -20,7 +20,7 @@ exploration_fraction: 0.5
 learning_starts: 10000
 
 # Training parameters
-total_timesteps: 300000
+total_timesteps: 10000000
 batch_size: 16
 buffer_size: 100000
 gamma: 0.99
