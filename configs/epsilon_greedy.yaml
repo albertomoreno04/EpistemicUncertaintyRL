@@ -3,13 +3,13 @@
 
 # General experiment information
 agent_type: epsilon_greedy
-env_name: CartPole-v1
-env_id: "CartPole-v1"
+env_id: "ALE/MontezumaRevenge-v5"
+env_name: ALE/MontezumaRevenge-v5
 seed: 42
 track: true
 capture_video: false
 save_model: false
-wandb_project_name: "nanodqn"
+wandb_project_name: "EpistemicUncertaintyRL"
 exp_name: "epsilon_greedy_experiment"
 
 # Exploration settings
