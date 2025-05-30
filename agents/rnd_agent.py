@@ -72,19 +72,20 @@ class RNDAgent:
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step):
         # Compute intrinsic reward
+        self.rnd.update_obs_stats(obs)
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
         intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
         total_reward = extrinsic_coef * rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
-        if "final_info" in infos:
-            for info in infos["final_info"]:
-                if info and "state" in info:
-                    try:
-                        self.unique_state_ids.add(info["state"])
-                    except Exception as e:
-                        continue
+        try:
+            obs_np = np.asarray(obs)
+            for ob in obs_np:
+                key = tuple(ob.flatten())
+                self.unique_state_ids.add(key)
+        except Exception as e:
+            print(f"Warning: Failed to hash obs for unique states: {e}")
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
