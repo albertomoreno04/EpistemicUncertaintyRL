@@ -1,3 +1,4 @@
+import hashlib
 from functools import partial
 
 import random
@@ -63,17 +64,13 @@ class RNDAgent:
         q_values = self._q_apply_jit(params, obs)
         probs = jax.nn.softmax(q_values / temperature, axis=-1)
         actions = jax.random.categorical(key, jnp.log(probs), axis=-1)
-        entropy = -jnp.sum(probs * jnp.log(probs + 1e-12), axis=-1).mean()
-        return actions, entropy
+        return actions
 
     def select_action(self, obs, global_step):
         self.rng, key = jax.random.split(self.rng)
 
         temperature = self.config.get("temperature", 1.0)
-        actions, entropy = self._select_action_jit(self.q_state.params, obs, key, temperature)
-        self.log_info.update({
-            "exploration/entropy": float(entropy),
-        })
+        actions = self._select_action_jit(self.q_state.params, obs, key, temperature)
         return np.atleast_1d(actions).astype(np.int32)
 
 
@@ -89,8 +86,8 @@ class RNDAgent:
         try:
             obs_np = np.asarray(obs)
             for ob in obs_np:
-                key = tuple(ob.flatten())
-                self.unique_state_ids.add(key)
+                obs_hash = hashlib.sha1(ob.tobytes()).hexdigest()
+                self.unique_state_ids.add(obs_hash)
         except Exception as e:
             print(f"Warning: Failed to hash obs for unique states: {e}")
 
