@@ -1,3 +1,4 @@
+import hashlib
 import random
 from functools import partial
 
@@ -107,13 +108,13 @@ class EpsilonGreedyAgent:
             if trunc:
                 real_next_obs[idx] = infos["final_observation"][idx]
 
-        if "final_info" in infos:
-            for info in infos["final_info"]:
-                if info and "state" in info:
-                    try:
-                        self.unique_state_ids.add(info["state"])
-                    except Exception as e:
-                        print("Warning: Could not hash state:", e)
+        try:
+            obs_np = np.asarray(obs)
+            for ob in obs_np:
+                obs_hash = hashlib.sha1(ob.tobytes()).hexdigest()
+                self.unique_state_ids.add(obs_hash)
+        except Exception as e:
+            print(f"Warning: Failed to hash obs for unique states: {e}")
 
         self.rb.add(obs, real_next_obs, actions, rewards, terminations, infos)
 
