@@ -59,14 +59,21 @@ class RNDAgent:
         return max(slope * t + start_e, end_e)
 
     @partial(jax.jit, static_argnums=0)
-    def _select_action_jit(self, params, obs, key):
+    def _select_action_jit(self, params, obs, key, temperature):
         q_values = self._q_apply_jit(params, obs)
-        return jnp.argmax(q_values, axis=-1)
+        probs = jax.nn.softmax(q_values / temperature, axis=-1)
+        actions = jax.random.categorical(key, jnp.log(probs), axis=-1)
+        entropy = -jnp.sum(probs * jnp.log(probs + 1e-12), axis=-1).mean()
+        return actions, entropy
 
     def select_action(self, obs, global_step):
         self.rng, key = jax.random.split(self.rng)
 
-        actions = self._select_action_jit(self.q_state.params, obs, key)
+        temperature = self.config.get("temperature", 1.0)
+        actions, entropy = self._select_action_jit(self.q_state.params, obs, key, temperature)
+        self.log_info.update({
+            "exploration/entropy": float(entropy),
+        })
         return np.atleast_1d(actions).astype(np.int32)
 
 
