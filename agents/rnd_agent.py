@@ -84,13 +84,10 @@ class RNDAgent:
         total_reward = extrinsic_coef * clipped_rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
-        try:
-            obs_np = np.asarray(obs)
-            for ob in obs_np:
-                obs_hash = hashlib.sha1(ob.tobytes()).hexdigest()
-                self.unique_state_ids.add(obs_hash)
-        except Exception as e:
-            print(f"Warning: Failed to hash obs for unique states: {e}")
+        embedding = self.rnd.target.apply(self.rnd.target_params, obs)
+        embedding = jnp.round(embedding * 10).astype(jnp.int32)
+        obs_hash = hashlib.sha1(np.asarray(embedding).tobytes()).hexdigest()
+        self.unique_state_ids.add(obs_hash)
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
