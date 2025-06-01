@@ -9,7 +9,7 @@ learning_rate: 0.0001
 gamma: 0.99
 tau: 1.0
 buffer_size: 10000
-batch_size: 128
+batch_size: 64
 target_network_frequency: 500
 seed: 7
 seeds: [42, 1337, 2025, 7, 99]
