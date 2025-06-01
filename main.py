@@ -31,6 +31,13 @@ import json
 class TrainState(TrainState):
     target_params: flax.core.FrozenDict
 
+def initialize_obs_stats(rnd_module, envs, num_steps=1000):
+    obs, _ = envs.reset()
+    for _ in range(num_steps):
+        random_actions = np.array([envs.single_action_space.sample() for _ in range(envs.num_envs)])
+        next_obs, _, terminations, truncations, infos = envs.step(random_actions)
+        rnd_module.update_obs_stats(obs)
+        obs = next_obs
 
 def run_single_seed(config):
     config_for_group = {k: v for k, v in config.items() if k != "seed"}
@@ -64,6 +71,8 @@ def run_single_seed(config):
         obs, _ = envs.reset(seed=config["seed"])
 
         agent = make_agent(config["agent_type"], envs, config)
+        if config["agent_type"] == "rnd":
+            initialize_obs_stats(agent.rnd, envs, num_steps=1000)
 
         start_time = time.time()  # start timer for SPS (steps-per-second) computation
         last_mean_rs = 0  # the average reward, reporting purposes
