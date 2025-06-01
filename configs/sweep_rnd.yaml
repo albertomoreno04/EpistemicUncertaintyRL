@@ -1,14 +1,18 @@
-method: bayes
+method: grid
 program: main.py
 metric:
   name: charts/episodic_return
   goal: maximize
 
 parameters:
+  seed:
+    values: [ 42, 1337, 2025, 7, 99 ]
   extrinsic_coef:
-    values: [0.25, 1.0, 2.0]
+    values: [ 0.25, 1.0, 2.0 ]
   hidden_dim:
     values: [ 32, 64 ]
   predictor_update_freq:
-    values: [2, 4]
+    values: [ 2, 4 ]
+  temperature:
+    values: [ 0.5, 1.0 ]
 
