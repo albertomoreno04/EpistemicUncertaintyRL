@@ -71,6 +71,7 @@ def run_single_seed(config):
         obs, _ = envs.reset(seed=config["seed"])
 
         agent = make_agent(config["agent_type"], envs, config)
+        print(config["agent_type"])
         if config["agent_type"] == "rnd":
             initialize_obs_stats(agent.rnd, envs, num_steps=1000)
 
