@@ -13,6 +13,7 @@ from flax.training.train_state import TrainState
 from utils.replay_buffer import ReplayBuffer
 from exploration.rnd import RND
 from networks.q_network import QNetwork
+from utils.state_hasher import StateHasher
 
 class TrainState(TrainState):
     target_params: flax.core.FrozenDict
@@ -54,6 +55,8 @@ class RNDAgent:
         )
 
         self.log_info = {}
+        self.state_hasher = StateHasher(obs_dim=np.prod(envs.single_observation_space.shape), hash_size=64,
+                                        seed=config["seed"])
 
     def linear_schedule(self, start_e, end_e, duration, t):
         slope = (end_e - start_e) / duration
@@ -84,10 +87,9 @@ class RNDAgent:
         total_reward = extrinsic_coef * clipped_rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
-        embedding = self.rnd.target.apply(self.rnd.target_params, obs)
-        embedding = jnp.round(embedding * 10).astype(jnp.int32)
-        obs_hash = hashlib.sha1(np.asarray(embedding).tobytes()).hexdigest()
-        self.unique_state_ids.add(obs_hash)
+        obs_hashes = self.state_hasher.hash_obs(obs)
+        for h in np.array(obs_hashes):
+            self.unique_state_ids.add(int(h))
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
