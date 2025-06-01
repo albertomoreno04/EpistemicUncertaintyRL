@@ -87,7 +87,7 @@ class RNDAgent:
         total_reward = extrinsic_coef * clipped_rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
-        obs_hashes = self.state_hasher.hash_obs(obs)
+        obs_hashes = self.state_hasher.hash_obs(obs).block_until_ready()
         for h in np.array(obs_hashes):
             self.unique_state_ids.add(int(h))
 
