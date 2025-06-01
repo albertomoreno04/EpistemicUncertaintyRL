@@ -4,7 +4,7 @@ env_id: "ALE/MontezumaRevenge-v5"
 env_name: ALE/MontezumaRevenge-v5
 exp_name: "rnd_experiment"
 num_envs: 1
-total_timesteps: 15000000
+total_timesteps: 12500000
 learning_rate: 0.0001
 gamma: 0.99
 tau: 1.0

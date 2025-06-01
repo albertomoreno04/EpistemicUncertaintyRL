@@ -80,7 +80,8 @@ class RNDAgent:
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
         intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
-        total_reward = extrinsic_coef * rewards + intrinsic_coef * intrinsic_reward
+        clipped_rewards = jnp.clip(rewards, -1.0, 1.0)
+        total_reward = extrinsic_coef * clipped_rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
         try:
