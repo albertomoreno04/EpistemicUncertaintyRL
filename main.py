@@ -72,8 +72,8 @@ def run_single_seed(config):
 
         agent = make_agent(config["agent_type"], envs, config)
         print(config["agent_type"])
-        # if config["agent_type"] == "rnd":
-        #     initialize_obs_stats(agent.rnd, envs, num_steps=1000)
+        if config["agent_type"] == "rnd":
+            initialize_obs_stats(agent.rnd, envs, num_steps=1000)
 
         start_time = time.time()  # start timer for SPS (steps-per-second) computation
         last_mean_rs = 0  # the average reward, reporting purposes
