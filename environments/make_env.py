@@ -26,7 +26,7 @@ def make_env(env_id, seed, idx, capture_video):
 
     return thunk
 
-def make_atari_env(env_id, seed, idx, capture_video, frame_stack=4, resize_shape=84):
+def make_atari_env(env_id, seed, idx, capture_video, frame_stack=1, resize_shape=84):
     def thunk():
         if capture_video and idx == 0:
             env = gym.make(env_id, render_mode="rgb_array")
