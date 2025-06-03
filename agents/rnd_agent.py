@@ -79,7 +79,10 @@ class RNDAgent:
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step):
         # Compute intrinsic reward
-        self.rnd.update_obs_stats(obs)
+        if jnp.isnan(obs).any() or jnp.isinf(obs).any():
+            print(f"[WARNING] Bad obs values at step {global_step}")
+        else:
+            self.rnd.update_obs_stats(obs)
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
         intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
