@@ -50,13 +50,9 @@ class RND:
 
     @partial(jax.jit, static_argnums=0)
     def compute_intrinsic_reward(self, obs):
-        obs_norm = (obs - self.obs_running_mean) / jnp.sqrt(self.obs_running_var + 1e-8)
-        obs_norm = jnp.clip(obs_norm, -5.0, 5.0)
-
-        pred = self.predictor.apply(self.train_state.params, obs_norm)
-        target = self.target.apply(self.target_params, obs_norm)
-        reward = jnp.mean(jnp.square(pred - target), axis=-1)
-        return reward
+        pred = self.predictor.apply(self.train_state.params, obs)
+        target = self.target.apply(self.target_params, obs)
+        return jnp.mean(jnp.square(pred - target), axis=-1)
 
     @partial(jax.jit, static_argnums=0)
     def update(self, obs):

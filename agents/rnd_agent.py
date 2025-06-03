@@ -55,8 +55,8 @@ class RNDAgent:
         )
 
         self.log_info = {}
-        self.state_hasher = StateHasher(obs_dim=np.prod(envs.single_observation_space.shape), hash_size=64,
-                                        seed=config["seed"])
+        # self.state_hasher = StateHasher(obs_dim=np.prod(envs.single_observation_space.shape), hash_size=64,
+        #                                 seed=config["seed"])
 
     def linear_schedule(self, start_e, end_e, duration, t):
         slope = (end_e - start_e) / duration
@@ -79,7 +79,7 @@ class RNDAgent:
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step):
         # Compute intrinsic reward
-        self.rnd.update_obs_stats(obs)
+        # self.rnd.update_obs_stats(obs)
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
         intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
@@ -87,9 +87,13 @@ class RNDAgent:
         total_reward = extrinsic_coef * clipped_rewards + intrinsic_coef * intrinsic_reward
 
         self.total_extrinsic_reward += float(jnp.sum(rewards))
-        obs_hashes = self.state_hasher.hash_obs(obs)
-        for h in np.array(obs_hashes):
-            self.unique_state_ids.add(int(h))
+        try:
+            obs_np = np.asarray(obs)
+            for ob in obs_np:
+                obs_hash = hashlib.sha1(ob.tobytes()).hexdigest()
+                self.unique_state_ids.add(obs_hash)
+        except Exception as e:
+            print(f"Warning: Failed to hash obs for unique states: {e}")
 
         self.log_info.update({
             "rewards/extrinsic_mean": float(jnp.mean(rewards)),
