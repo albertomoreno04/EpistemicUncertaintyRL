@@ -18,8 +18,8 @@ agent_type: rnd
 wandb_project_name: "EpistemicUncertaintyRL"
 save_model: false
 track: true
-predictor_hidden_dim: 128
-target_hidden_dim: 128
+predictor_hidden_dim: 512
+target_hidden_dim: 512
 intrinsic_coef: 1.0
 extrinsic_coef: 2.0
 predictor_update_freq: 4
