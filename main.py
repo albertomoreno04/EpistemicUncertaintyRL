@@ -160,7 +160,7 @@ def run_single_seed(config):
 
 if __name__ == "__main__":
 
-    with open("configs/rnd.yaml", "r") as f:
+    with open("configs/rnd_montezuma.yaml", "r") as f:
         base_config = yaml.safe_load(f)
 
     run_single_seed(base_config)

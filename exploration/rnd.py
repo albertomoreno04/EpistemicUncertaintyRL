@@ -50,7 +50,7 @@ class RND:
 
     @partial(jax.jit, static_argnums=0)
     def compute_intrinsic_reward(self, obs):
-        obs = obs.reshape((obs.shape[0], -1))
+        # obs = obs.reshape((obs.shape[0], -1))
         obs_norm = (obs - self.obs_running_mean) / jnp.sqrt(self.obs_running_var + 1e-8)
         obs_norm = jnp.clip(obs_norm, -5.0, 5.0)
 
@@ -61,7 +61,7 @@ class RND:
 
     @partial(jax.jit, static_argnums=0)
     def update(self, obs):
-        obs = obs.reshape((obs.shape[0], -1))
+        # obs = obs.reshape((obs.shape[0], -1))
         obs_norm = (obs - self.obs_running_mean) / jnp.sqrt(self.obs_running_var + 1e-8)
         obs_norm = jnp.clip(obs_norm, -5.0, 5.0)
         def loss_fn(params):

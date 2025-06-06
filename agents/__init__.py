@@ -11,6 +11,6 @@ def make_agent(agent_type: str, envs, config: dict, env_params=None):
     elif agent_type == "rnd" and config["env_id"] == "DeepSea-bsuite":
         return RNDDeepSeaAgent(envs, config, env_params)
     elif agent_type == "rnd" and config["env_id"]:
-        return RNDAgent(envs, config, env_params)
+        return RNDAgent(envs, config)
     else:
         raise ValueError(f"Unknown agent type: {agent_type}")

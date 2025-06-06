@@ -53,6 +53,7 @@ class RNDAgent:
             envs.single_observation_space,
             envs.single_action_space,
         )
+        self.clip_extrinsic = config["clip_extrinsic_reward"]
 
         self.log_info = {}
         # self.state_hasher = StateHasher(obs_dim=np.prod(envs.single_observation_space.shape), hash_size=64,

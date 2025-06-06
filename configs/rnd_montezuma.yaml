@@ -24,3 +24,4 @@ intrinsic_coef: 1.0
 extrinsic_coef: 2.0
 predictor_update_freq: 4
 temperature: 1.0
+clip_extrinsic_reward: False
