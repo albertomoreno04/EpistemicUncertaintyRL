@@ -1,0 +1,15 @@
+method: grid
+program: main.py
+metric:
+  name: charts/episodic_return
+  goal: maximize
+
+parameters:
+  seed:
+    values: [42, 1337, 2025, 7, 99]
+  epsilon:
+    values: [0.5, 1.0]
+  epsilon_final:
+    values: [0.0001, 0.001]
+  exploration_fraction:
+    values: [0.01, 0.03, 0.1]

@@ -3,8 +3,8 @@
 
 # General experiment information
 agent_type: epsilon_greedy
-env_id: "ALE/MontezumaRevenge-v5"
-env_name: ALE/MontezumaRevenge-v5
+env_id: "Acrobot-v1"
+env_name: Acrobot-v1
 seed: 42
 track: true
 capture_video: false
@@ -14,19 +14,17 @@ exp_name: "epsilon_greedy_experiment"
 
 # Exploration settings
 epsilon: 1.0
-epsilon_final: 0.0
-epsilon_decay: 10000
-exploration_fraction: 0.5
-learning_starts: 10000
+epsilon_final: 0.0001
+exploration_fraction: 0.03
 
 # Training parameters
-total_timesteps: 10000000
-batch_size: 16
-buffer_size: 100000
+total_timesteps: 300000
+batch_size: 64
+buffer_size: 50000
 gamma: 0.99
 tau: 1.0
-target_network_frequency: 500
-train_freq: 4
+target_network_frequency: 50
+train_freq: 1
 
 # Algorithm-specific hyperparameters
 learning_rate: 0.001

@@ -4,6 +4,7 @@ from functools import partial
 import random
 import jax
 import jax.numpy as jnp
+import gymnasium as gym
 import flax
 import optax
 import time
@@ -11,22 +12,50 @@ import numpy as np
 import os
 from flax.training.train_state import TrainState
 from utils.replay_buffer import ReplayBuffer
-from exploration.rnd import RND
+from exploration.rnd_deepsea import RND
 from networks.q_network import QNetwork
+from gymnasium.spaces import Box, Discrete
+from gymnax.environments.spaces import Box as GxBox, Discrete as GxDiscrete
 from utils.state_hasher import StateHasher
 
 class TrainState(TrainState):
     target_params: flax.core.FrozenDict
 
-class RNDAgent:
-    def __init__(self, envs, config):
+class RNDDeepSeaAgent:
+
+    def convert_space(self, space):
+        if isinstance(space, GxBox):
+            return Box(low=float(space.low), high=float(space.high), shape=space.shape, dtype=np.float32)
+        elif isinstance(space, GxDiscrete):
+            return Discrete(space.n)
+        else:
+            raise NotImplementedError(f"Unsupported space: {type(space)}")
+
+    def __init__(self, envs, config, env_params=None):
         self.envs = envs
         self.config = config
-        obs_shape = envs.single_observation_space.shape
+        obs_space = envs.observation_space(env_params)
+        act_space = envs.action_space(env_params)
+        self.single_observation_space = self.convert_space(obs_space)
+        self.single_action_space = self.convert_space(act_space)
+        flat_shape = int(np.prod(self.single_observation_space.shape))
+        self.q_network = QNetwork(action_dim=self.single_action_space.n)
+        self.rnd = RND((2 * config["env_size"], ), config)
+        flat_obs_space = gym.spaces.Box(
+            low=-0.0,
+            high=1.0,
+            shape=(2 * config["env_size"],),
+            dtype=np.float32,
+        )
+        self.rb = ReplayBuffer(
+            config["buffer_size"],
+            flat_obs_space,
+            self.single_action_space,
+        )
 
-        self.q_network = QNetwork(action_dim=envs.single_action_space.n)
+
         self._q_apply_jit = jax.jit(lambda params, obs: self.q_network.apply({"params": params}, obs))
-        dummy_obs = jnp.zeros((1,) + obs_shape, dtype=jnp.float32)
+        dummy_obs = jnp.zeros((1, 2 * config["env_size"]))
         self.rng = jax.random.PRNGKey(config["seed"])
         self.q_params = self.q_network.init(jax.random.PRNGKey(config["seed"] + 1), dummy_obs)
 
@@ -39,31 +68,37 @@ class RNDAgent:
         )
         self.opt_state = self.optimizer.init(self.q_state.params)
 
-        self.rnd = RND(obs_shape, config)
         self.tau = self.config.get("tau", 1.0)
         self.gamma = self.config["gamma"]
 
         self.total_extrinsic_reward = 0.0
         self.total_timesteps = self.config["total_timesteps"]
+        self.clip_extrinsic = self.config["clip_extrinsic_reward"]
 
         self.unique_state_ids = set()
-
-        self.rb = ReplayBuffer(
-            config["buffer_size"],
-            envs.single_observation_space,
-            envs.single_action_space,
-        )
 
         self.log_info = {}
         # self.state_hasher = StateHasher(obs_dim=np.prod(envs.single_observation_space.shape), hash_size=64,
         #                                 seed=config["seed"])
 
-    def linear_schedule(self, start_e, end_e, duration, t):
-        slope = (end_e - start_e) / duration
-        return max(slope * t + start_e, end_e)
+    def encode_obs(self, obs):
+
+        N = self.config["env_size"]
+        batch_size = obs.shape[0]
+        obs_reshaped = obs.reshape((batch_size, N, N))
+
+        row_idx = jnp.argmax(jnp.any(obs_reshaped == 1, axis=2), axis=1)
+        col_idx = jnp.argmax(jnp.any(obs_reshaped == 1, axis=1), axis=1)
+
+        row_onehot = jax.nn.one_hot(row_idx, N)
+        col_onehot = jax.nn.one_hot(col_idx, N)
+
+        pos_encoding = jnp.concatenate([row_onehot, col_onehot], axis=-1)
+        return pos_encoding
 
     @partial(jax.jit, static_argnums=0)
     def _select_action_jit(self, params, obs, key, temperature):
+        # pos_encoding = self.encode_obs(obs)
         q_values = self._q_apply_jit(params, obs)
         probs = jax.nn.softmax(q_values / temperature, axis=-1)
         actions = jax.random.categorical(key, jnp.log(probs), axis=-1)
@@ -79,10 +114,7 @@ class RNDAgent:
 
     def record_step(self, obs, next_obs, actions, rewards, dones, infos, global_step):
         # Compute intrinsic reward
-        if jnp.isnan(obs).any() or jnp.isinf(obs).any():
-            print(f"[WARNING] Bad obs values at step {global_step}")
-        else:
-            self.rnd.update_obs_stats(obs)
+        # self.rnd.update_obs_stats(pos_encoding)
         intrinsic_reward = self.rnd.compute_intrinsic_reward(obs)
         extrinsic_coef = self.config.get("extrinsic_coef", 1.0)
         intrinsic_coef = self.config.get("intrinsic_coef", 1.0)
@@ -135,7 +167,7 @@ class RNDAgent:
         )
         self.q_state = self.q_state.replace(params=new_params, opt_state=new_opt_state)
 
-        num_actions = self.envs.single_action_space.n
+        num_actions = self.single_action_space.n
         one_hot_actions = jax.nn.one_hot(actions.squeeze(), num_actions)
         p_a_t = jnp.mean(one_hot_actions, axis=0)
         entropy = -jnp.sum(p_a_t * jnp.log(p_a_t + 1e-12))

@@ -5,3 +5,6 @@ __pycache__/
 *.wandb
 *.pyc
 *.sh
+*.png
+csvs/**
+plot.py

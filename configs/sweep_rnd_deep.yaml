@@ -1,5 +1,5 @@
 method: grid
-program: main.py
+program: main_gymnax.py
 metric:
   name: charts/episodic_return
   goal: maximize
@@ -8,9 +8,11 @@ parameters:
   seed:
     values: [ 42, 1337, 2025, 7, 99 ]
   extrinsic_coef:
-    values: [ 15.0, 20.0, 30.0 ]
+    values: [ 0.5, 1.0, 2.0 ]
   hidden_dim:
-    values: [ 32, 64 ]
+    values: [ 16, 32 ]
   temperature:
-    values: [ 0.2, 0.3, 0.4 ]
+    values: [ 0.2, 0.5, 1.0 ]
+  env_size:
+    values: [8, 10, 12]
 
