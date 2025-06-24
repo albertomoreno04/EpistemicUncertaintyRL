@@ -101,11 +101,12 @@ See the configs/ directory for fully tunable experiment setups for each environm
 
 ## Acknowledgements
 
-```
 This project builds upon:
-•	CleanRL (https://docs.cleanrl.dev/rl-algorithms/dqn/)
-•	Gymnax
-•	Flax
-•	Optax
-•	W&B
-```
+
+- [CleanRL](https://docs.cleanrl.dev/rl-algorithms/dqn/) — High-quality, reproducible RL baselines.
+- [Gymnax](https://github.com/RobertTLange/gymnax) — JAX-native environments for RL research.
+- [Flax](https://github.com/google/flax) — Neural network library for JAX.
+- [Optax](https://github.com/deepmind/optax) — Gradient processing and optimization library for JAX.
+- [Weights & Biases (W&B)](https://wandb.ai/site) — Experiment tracking and visualization.
+
+This code was developed as part of a Bachelor Thesis / Research Project (2025) for the [TU Delft CSE Research Project](https://github.com/TU-Delft-CSE/Research-Project).
