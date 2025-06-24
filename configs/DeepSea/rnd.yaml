@@ -1,0 +1,32 @@
+env_id: "DeepSea-bsuite"
+
+# Environment settings
+num_envs: 1
+env_size: 10
+total_timesteps: 250000
+seed: 2025
+
+# Optimization hyperparameters
+learning_rate: 0.001
+gamma: 0.999
+tau: 1.0
+buffer_size: 50000
+batch_size: 16
+target_network_frequency: 200
+
+# Agent settings
+agent_type: "rnd"
+predictor_hidden_dim: 256
+target_hidden_dim: 256
+predictor_update_freq: 5
+temperature: 50.0
+clip_extrinsic_reward: false
+
+# Reward coefficients
+intrinsic_coef: 1.0
+extrinsic_coef: 0.1
+
+# Logging & tracking
+wandb_project_name: "Add name"
+track: true
+save_model: false

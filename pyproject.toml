@@ -10,13 +10,11 @@ dependencies = [
     "jax[cuda12]", # nvidia support by default
     "optax",
     "gymnax",
-#    "pandas",
-#    "matplotlib",
-#    "seaborn",
+    "scipy",
     "gymnasium[classic-control,atari,accept-rom-license]<1",
-    "numpy<2", # cuz stable baselines3 die otherwise
+    "numpy<2",
     "tyro",
-    "tqdm", # videos
+    "tqdm",
     "moviepy",
     "chex>=0.1.89",
     "opencv-python>=4.11.0.86",
